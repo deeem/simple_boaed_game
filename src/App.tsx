@@ -1,11 +1,10 @@
 import React from 'react'
-import { Layout, tiles } from './components/Layout'
+import { Layout } from './components/Layout'
 
 function App() {
   return (
     <>
-      <h1>asdfasd</h1>
-      <Layout tiles={tiles} />
+      <Layout />
     </>
   )
 }
