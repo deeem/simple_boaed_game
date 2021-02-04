@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface ITile {
   waypoint?: number
-  players?: string | number[]
+  players?: (string | number)[]
 }
 
-const initialState = [
+const initialState: ITile[] = [
   { waypoint: 1, players: [2, 3] },
   { waypoint: 7 },
   { waypoint: 8 },
@@ -28,8 +28,59 @@ const tileSlice = createSlice({
   name: 'tiles',
   initialState,
   reducers: {
-    add: (state, { payload }: PayloadAction<ITile>) => {
-      //   state.push(payload)
+    movePlayer: (
+      state,
+      { payload }: PayloadAction<{ id: number; value: number }>,
+    ) => {
+      const lastWaypoint = state.reduce(
+        (acc, tile) =>
+          tile.waypoint && tile.waypoint > acc ? tile.waypoint : acc,
+        1,
+      )
+
+      const currentTileIndx = state.findIndex((tile) =>
+        tile.players?.includes(payload.id),
+      )
+
+      const currentTile = state[currentTileIndx]
+
+      const currentWaypoint = currentTile.waypoint || 1
+
+      state[currentTileIndx] = {
+        ...currentTile,
+        players: currentTile.players?.filter(
+          (playerId) => playerId !== payload.id,
+        ),
+      }
+
+      const newWaypoint =
+        currentWaypoint + payload.value < lastWaypoint
+          ? currentWaypoint + payload.value
+          : lastWaypoint
+
+      const newWaypointTileIndx = state.findIndex(
+        (tile) => tile.waypoint === newWaypoint,
+      )
+
+      const newWaypointTile = state[newWaypointTileIndx]
+
+      state[newWaypointTileIndx] = {
+        ...newWaypointTile,
+        players: [...(newWaypointTile.players || []), payload.id],
+      }
+
+      // TODO: convert to selectors:
+      // [] getLastWaypoint
+      // [] getCurrentWaypoint
+      // [] getTileByPlayer
+      // [] getTileByWaypoint
+
+      /*      
+      {
+        type: 'tiles/movePlayer',
+        payload: {id: 1, value: 2}
+      }      
+      */
     },
   },
 })

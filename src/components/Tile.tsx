@@ -8,7 +8,7 @@ import {
 type Props = {
   title?: string | number
   waypoint?: number
-  players?: string | number[]
+  players?: (string | number)[]
 }
 
 const Tile: FC<Props> = ({ title, waypoint, players }) => (
