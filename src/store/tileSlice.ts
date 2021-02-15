@@ -2,15 +2,21 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface ITile {
   waypoint?: number
-  players?: (string | number)[]
+  players?: string[]
 }
 
 const initialState: ITile[] = [
-  { waypoint: 1, players: [2, 3] },
+  {
+    waypoint: 1,
+    players: [
+      'eea39748-ff40-40c8-9942-c2f690b43a2c',
+      '6c4f7868-d6ca-4862-a850-9ee8c813724c',
+    ],
+  },
   { waypoint: 7 },
   { waypoint: 8 },
   { waypoint: 9 },
-  { waypoint: 2, players: [1] },
+  { waypoint: 2, players: ['d79d7512-6fb5-11eb-9439-0242ac130002'] },
   { waypoint: 6 },
   {},
   { waypoint: 10 },
@@ -30,7 +36,7 @@ const tileSlice = createSlice({
   reducers: {
     movePlayer: (
       state,
-      { payload }: PayloadAction<{ id: number; value: number }>,
+      { payload }: PayloadAction<{ id: string; value: number }>,
     ) => {
       const lastWaypoint = state.reduce(
         (acc, tile) =>

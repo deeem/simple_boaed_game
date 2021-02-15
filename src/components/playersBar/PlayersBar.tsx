@@ -10,7 +10,6 @@ const PlayersBar: FC = () => {
     <BarContainer>
       {players.map((player) => (
         <PlayerContainer key={player.id}>
-          <div>{player.id}</div>
           <div>{player.name}</div>
         </PlayerContainer>
       ))}

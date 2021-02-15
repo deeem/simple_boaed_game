@@ -33,7 +33,12 @@ const Layout: FC = () => {
       {blocks}
       <button
         onClick={() =>
-          dispatch(tileSlice.actions.movePlayer({ id: 1, value: 2 }))
+          dispatch(
+            tileSlice.actions.movePlayer({
+              id: '6c4f7868-d6ca-4862-a850-9ee8c813724c',
+              value: 2,
+            }),
+          )
         }
       >
         click
