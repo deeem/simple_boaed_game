@@ -1,8 +1,10 @@
 import { configureStore, createSelector } from '@reduxjs/toolkit'
+import playerSlice from './playerSlice'
 import tileSlice from './tileSlice'
 
 const reducer = {
   tiles: tileSlice.reducer,
+  players: playerSlice.reducer,
 }
 
 const store = configureStore({ reducer })
