@@ -70,10 +70,12 @@ const tileSlice = createSlice({
       }
 
       // TODO: convert to selectors:
-      // [] getLastWaypoint
-      // [] getCurrentWaypoint
-      // [] getTileByPlayer
-      // [] getTileByWaypoint
+      // [*] getLastWaypoint
+      // [ ] getCurrentWaypoint
+      // [*] getTileByPlayer
+      // [ ] getTileByWaypoint
+
+      //
 
       /*      
       {

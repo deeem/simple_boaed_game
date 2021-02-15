@@ -5,12 +5,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store/configureStore'
 import tileSlice from 'store/tileSlice'
 
+// import { store } from 'store/configureStore'
+
 const Layout: FC = () => {
   const tiles = useSelector((state: RootState) => state.tiles)
   const dispatch = useDispatch()
 
   const dimensions = [4, 4]
   const [xMax, yMax] = dimensions
+
+  // store.getState().tiles.
 
   const blocks = []
   for (let i = 0; i < xMax * yMax; i++) {
