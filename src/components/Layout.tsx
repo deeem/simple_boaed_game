@@ -2,13 +2,13 @@ import React, { FC } from 'react'
 import { Tile } from './Tile'
 import { TilesContainer } from './Layout.style'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from 'store/configureStore'
+import { getTiles } from 'store/configureStore'
 import tileSlice from 'store/tileSlice'
 
 // import { store } from 'store/configureStore'
 
 const Layout: FC = () => {
-  const tiles = useSelector((state: RootState) => state.tiles)
+  const tiles = useSelector(getTiles)
   const dispatch = useDispatch()
 
   const dimensions = [4, 4]

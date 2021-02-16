@@ -5,11 +5,13 @@ import styled from 'styled-components'
 
 const PlayersBar: FC = () => {
   const players = useSelector((state: RootState) => state.players)
+  const activePlayer = useSelector((state: RootState) => state.activePlayer)
 
   return (
     <BarContainer>
       {players.map((player) => (
         <PlayerContainer key={player.id}>
+          <div>{player.id === activePlayer.id && '+'}</div>
           <div>{player.name}</div>
         </PlayerContainer>
       ))}
