@@ -14,7 +14,7 @@ function App() {
   console.log('next', nextPlayer.name)
 
   useEffect(() => {
-    dispatch(activePlayerSlice.actions.setActive(firstPlayer))
+    dispatch(activePlayerSlice.actions.setActive(firstPlayer.id))
 
     console.log('--->', firstPlayer)
   }, [])

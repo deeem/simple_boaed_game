@@ -33,17 +33,23 @@ export const getFirstPlayer = createDraftSafeSelector(
   (players) => players[0],
 )
 
-export const getActivePlayer = (state: RootState) => state.activePlayer
+export const getActivePlayerId = (state: RootState) => state.activePlayer
+
+export const getActivePlayer = createDraftSafeSelector(
+  getActivePlayerId,
+  getPlayers,
+  (activePlayerId, players) => {
+    return players.find((player) => player.id === activePlayerId)
+  },
+)
 
 export const getNextPlayer = createDraftSafeSelector(
-  getActivePlayer,
+  getActivePlayerId,
   getPlayers,
   (active, players) => {
     const lastPlayerIndx = players.length - 1
 
-    const activePlayerIndx = players.findIndex(
-      (player) => player.id === active.id,
-    )
+    const activePlayerIndx = players.findIndex((player) => player.id === active)
 
     const nextPlayerIndx =
       activePlayerIndx === lastPlayerIndx ? 0 : activePlayerIndx + 1

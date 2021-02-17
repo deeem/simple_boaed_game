@@ -6,19 +6,19 @@ import styled from 'styled-components'
 
 type Props = {
   player: IPlayer
-  activePlayer: IPlayer
+  activePlayer: string
 }
 
 const Item: FC<Props> = ({ player, activePlayer }) => {
   const dispatch = useDispatch()
 
-  const isActive = player.id === activePlayer.id
+  const isActive = player.id === activePlayer
 
   const move = () => {
     console.log('move clicked')
     dispatch(
       tileSlice.actions.movePlayer({
-        id: activePlayer.id,
+        id: activePlayer,
         value: 1,
       }),
     )
