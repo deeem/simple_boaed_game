@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { IPlayer } from 'store/playerSlice'
 import {
   TileContainer,
   WaypointContainer,
@@ -8,13 +9,19 @@ import {
 type Props = {
   title?: string | number
   waypoint?: number
-  players?: string[]
+  players?: IPlayer[]
 }
 
 const Tile: FC<Props> = ({ title, waypoint, players }) => (
   <TileContainer>
     {waypoint && <WaypointContainer>{waypoint}</WaypointContainer>}
-    {players && <PlayersContainer>{players}</PlayersContainer>}
+    {players && (
+      <PlayersContainer>
+        {players.map((player) => (
+          <span key={player.id}>{player.name}</span>
+        ))}
+      </PlayersContainer>
+    )}
   </TileContainer>
 )
 

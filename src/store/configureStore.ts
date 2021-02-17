@@ -1,4 +1,4 @@
-import { configureStore, createSelector } from '@reduxjs/toolkit'
+import { configureStore, createDraftSafeSelector } from '@reduxjs/toolkit'
 import activePlayerSlice from './activePlayerSlice'
 import playerSlice from './playerSlice'
 import tileSlice from './tileSlice'
@@ -17,9 +17,9 @@ export type RootState = ReturnType<typeof store.getState>
 
 /* Selectors */
 
-export const getTiles = (state: RootState) => state.tiles
+export const getTilesData = (state: RootState) => state.tiles
 
-export const getLastWaypoint = createSelector(getTiles, (tiles) =>
+export const getLastWaypoint = createDraftSafeSelector(getTilesData, (tiles) =>
   tiles.reduce(
     (acc, tile) => (tile.waypoint && tile.waypoint > acc ? tile.waypoint : acc),
     1,
@@ -28,14 +28,14 @@ export const getLastWaypoint = createSelector(getTiles, (tiles) =>
 
 export const getPlayers = (state: RootState) => state.players
 
-export const getFirstPlayer = createSelector(
+export const getFirstPlayer = createDraftSafeSelector(
   getPlayers,
   (players) => players[0],
 )
 
 export const getActivePlayer = (state: RootState) => state.activePlayer
 
-export const getNextPlayer = createSelector(
+export const getNextPlayer = createDraftSafeSelector(
   getActivePlayer,
   getPlayers,
   (active, players) => {
@@ -50,4 +50,27 @@ export const getNextPlayer = createSelector(
 
     return players[nextPlayerIndx]
   },
+)
+
+export const getPlayerById = createDraftSafeSelector(
+  getPlayers,
+  (_: RootState, id: string) => id,
+  (players, id) => {
+    return players.find((player) => player.id === id)
+  },
+)
+
+export const getTiles = createDraftSafeSelector(
+  getPlayers,
+  getTilesData,
+  (players, tiles) =>
+    tiles.map((tile) => {
+      if (!('players' in tile)) return { ...tile }
+
+      const tilePlayers = tile.players?.map((playerId) =>
+        players.find((player) => player.id === playerId),
+      )
+
+      return { ...tile, players: tilePlayers }
+    }),
 )
