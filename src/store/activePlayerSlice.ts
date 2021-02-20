@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-const initialState: string = ''
+import { initialactivePlayerSlice as initialState } from 'initialValues'
 
 const activePlayerSlice = createSlice({
   name: 'activePlayer',
