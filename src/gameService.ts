@@ -5,6 +5,7 @@ import {
   initialTileSlice,
 } from 'initialValues'
 import { getNextPlayer } from 'util/getNextPlayer'
+import { movePlayerForward } from 'util/movePlayerForward'
 import { assign, createMachine, interpret } from 'xstate'
 
 const game = new Game()
@@ -34,7 +35,10 @@ const machine = createMachine(
         },
       },
       move_phase: {
-        entry: 'log',
+        entry: ['log', 'movePlayerForward', 'assignMovePlayerForward'],
+        on: {
+          always: [{ target: 'player_turn_start_phase' }],
+        },
       },
     },
   },
@@ -46,6 +50,13 @@ const machine = createMachine(
       assingNextPlayerActive: assign({
         activePlayer: (context) =>
           getNextPlayer(context.activePlayer, context.players).id,
+      }),
+      movePlayerForward: (context, event) => {
+        game.movePlayerForward(context.activePlayer)
+      },
+      assignMovePlayerForward: assign({
+        tiles: (context, event) =>
+          movePlayerForward(context.activePlayer, context.tiles),
       }),
       log: (_, event) => {
         console.log('in log', event)

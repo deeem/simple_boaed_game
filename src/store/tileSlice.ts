@@ -17,7 +17,7 @@ const tileSlice = createSlice({
   initialState,
   reducers: {
     movePlayerForward: (state, { payload }: PayloadAction<{ id: string }>) => {
-      movePlayerForward(payload.id, state)
+      return movePlayerForward(payload.id, state)
     },
     movePlayer: (
       state,

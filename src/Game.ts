@@ -24,6 +24,10 @@ class Game {
       }),
     )
   }
+
+  movePlayerForward(activePlayerId: string) {
+    store.dispatch(tileSlice.actions.movePlayerForward({ id: activePlayerId }))
+  }
 }
 
 export { Game }
