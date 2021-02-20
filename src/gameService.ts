@@ -1,23 +1,36 @@
 import { Game } from 'Game'
-import { createMachine, interpret } from 'xstate'
+import {
+  initialactivePlayerSlice,
+  initialPlayerSlice,
+  initialTileSlice,
+} from 'initialValues'
+import { getNextPlayer } from 'util/getNextPlayer'
+import { assign, createMachine, interpret } from 'xstate'
 
 const game = new Game()
 
 const machine = createMachine(
   {
+    context: {
+      tiles: initialTileSlice,
+      players: initialPlayerSlice,
+      activePlayer: initialactivePlayerSlice,
+    },
     initial: 'initial_phase',
     states: {
       initial_phase: {
         on: {
           start_game: {
-            target: 'wait_input_phase',
+            target: 'player_turn_start_phase',
           },
         },
       },
-      wait_input_phase: {
-        entry: 'setNextPlayerActive',
+      player_turn_start_phase: {
+        entry: ['setNextPlayerActive', 'assingNextPlayerActive'],
         on: {
-          always: [{ target: 'move_phase' }],
+          player_move_input_recieved: {
+            target: 'move_phase',
+          },
         },
       },
       move_phase: {
@@ -27,10 +40,14 @@ const machine = createMachine(
   },
   {
     actions: {
-      setNextPlayerActive: (context, event) => {
+      setNextPlayerActive: () => {
         game.setNextActivePlayer()
       },
-      log: (context, event) => {
+      assingNextPlayerActive: assign({
+        activePlayer: (context) =>
+          getNextPlayer(context.activePlayer, context.players).id,
+      }),
+      log: (_, event) => {
         console.log('in log', event)
       },
     },
@@ -92,4 +109,26 @@ gameService.onTransition((state) => {
 
 
 
+*/
+
+/*
+
+    states: {
+      initial_phase: {
+        on: {
+          start_game: {
+            target: 'wait_input_phase',
+          },
+        },
+      },
+      wait_input_phase: {
+        entry: 'setNextPlayerActive',
+        on: {
+          always: [{ target: 'move_phase' }],
+        },
+      },
+      move_phase: {
+        entry: 'log',
+      },
+    },
 */

@@ -1,6 +1,7 @@
 import { createDraftSafeSelector } from '@reduxjs/toolkit'
 import { RootState } from './configureStore'
 import { getLastWaypoint } from 'util/getLastWaypoint'
+import { getNextPlayer } from 'util/getNextPlayer'
 
 const selectTiles = (state: RootState) => state.tiles
 
@@ -26,16 +27,7 @@ const selectTilesWithRelations = createDraftSafeSelector(
 const selectNextPlayer = createDraftSafeSelector(
   selectActivePlayerId,
   selectPlayers,
-  (active, players) => {
-    const lastPlayerIndx = players.length - 1
-
-    const activePlayerIndx = players.findIndex((player) => player.id === active)
-
-    const nextPlayerIndx =
-      activePlayerIndx === lastPlayerIndx ? 0 : activePlayerIndx + 1
-
-    return players[nextPlayerIndx]
-  },
+  getNextPlayer,
 )
 
 const selectLastWaypoint = createDraftSafeSelector(selectTiles, getLastWaypoint)

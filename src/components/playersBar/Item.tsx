@@ -1,3 +1,4 @@
+import { gameService } from 'gameService'
 import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { IPlayer } from 'store/playerSlice'
@@ -10,18 +11,22 @@ type Props = {
 }
 
 const Item: FC<Props> = ({ player, activePlayer }) => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   const isActive = player.id === activePlayer
 
   const move = () => {
     console.log('move clicked')
-    dispatch(
-      tileSlice.actions.movePlayer({
-        id: activePlayer,
-        value: 1,
-      }),
-    )
+    // dispatch(
+    //   tileSlice.actions.movePlayer({
+    //     id: activePlayer,
+    //     value: 1,
+    //   }),
+    // )
+
+    const moves = window.confirm('enter moves') // типа открыли модалку
+
+    gameService.send('player_move_input_recieved')
   }
 
   return (
