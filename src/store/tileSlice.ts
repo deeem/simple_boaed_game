@@ -1,8 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { initialTileSlice as initialState } from 'initialValues'
 import { getLastWaypoint } from 'util/getLastWaypoint'
+import { getTileByPlayerId } from 'util/getTileByPlayerId'
+import { getTileByWaypoint } from 'util/getTileByWaypoint'
+import { getTileIndex } from 'util/getTileIndex'
 
 export interface ITile {
+  id: number
   waypoint?: number
   players?: string[]
 }
@@ -17,51 +21,28 @@ const tileSlice = createSlice({
     ) => {
       const lastWaypoint = getLastWaypoint(state)
 
-      const currentTileIndx = state.findIndex((tile) =>
-        tile.players?.includes(payload.id),
-      )
+      const playerTile = getTileByPlayerId(payload.id, state)
 
-      const currentTile = state[currentTileIndx]
+      const playerCurrentWaypoint = playerTile.waypoint || 1
 
-      const currentWaypoint = currentTile.waypoint || 1
+      const destinationWaypoint =
+        playerCurrentWaypoint + payload.value < lastWaypoint
+          ? playerCurrentWaypoint + payload.value
+          : lastWaypoint
 
-      state[currentTileIndx] = {
-        ...currentTile,
-        players: currentTile.players?.filter(
+      const destinationTile = getTileByWaypoint(destinationWaypoint, state)
+
+      state[getTileIndex(playerTile, state)] = {
+        ...playerTile,
+        players: playerTile.players?.filter(
           (playerId) => playerId !== payload.id,
         ),
       }
 
-      const newWaypoint =
-        currentWaypoint + payload.value < lastWaypoint
-          ? currentWaypoint + payload.value
-          : lastWaypoint
-
-      const newWaypointTileIndx = state.findIndex(
-        (tile) => tile.waypoint === newWaypoint,
-      )
-
-      const newWaypointTile = state[newWaypointTileIndx]
-
-      state[newWaypointTileIndx] = {
-        ...newWaypointTile,
-        players: [...(newWaypointTile.players || []), payload.id],
+      state[getTileIndex(destinationTile, state)] = {
+        ...destinationTile,
+        players: [...(destinationTile.players || []), payload.id],
       }
-
-      // TODO: convert to selectors:
-      // [*] getLastWaypoint
-      // [ ] getCurrentWaypoint
-      // [*] getTileByPlayer
-      // [ ] getTileByWaypoint
-
-      //
-
-      /*      
-      {
-        type: 'tiles/movePlayer',
-        payload: {id: 1, value: 2}
-      }      
-      */
     },
   },
 })

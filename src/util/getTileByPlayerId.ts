@@ -1,6 +1,6 @@
 import { ITile } from 'store/tileSlice'
 
-const getTileByPlayer = (playerId: string, tiles: ITile[]): ITile => {
+const getTileByPlayerId = (playerId: string, tiles: ITile[]): ITile => {
   const currentTileIndx = tiles.findIndex((tile) =>
     tile.players?.includes(playerId),
   )
@@ -8,4 +8,4 @@ const getTileByPlayer = (playerId: string, tiles: ITile[]): ITile => {
   return tiles[currentTileIndx]
 }
 
-export { getTileByPlayer }
+export { getTileByPlayerId }
