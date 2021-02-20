@@ -4,6 +4,7 @@ import { getLastWaypoint } from 'util/getLastWaypoint'
 import { getTileByPlayerId } from 'util/getTileByPlayerId'
 import { getTileByWaypoint } from 'util/getTileByWaypoint'
 import { getTileIndex } from 'util/getTileIndex'
+import { movePlayerForward } from 'util/movePlayerForward'
 
 export interface ITile {
   id: number
@@ -15,6 +16,9 @@ const tileSlice = createSlice({
   name: 'tiles',
   initialState,
   reducers: {
+    movePlayerForward: (state, { payload }: PayloadAction<{ id: string }>) => {
+      movePlayerForward(payload.id, state)
+    },
     movePlayer: (
       state,
       { payload }: PayloadAction<{ id: string; value: number }>,
