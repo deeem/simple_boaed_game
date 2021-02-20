@@ -1,5 +1,6 @@
 import activePlayerSlice from 'store/activePlayerSlice'
-import { getNextPlayer, RootState, store } from 'store/configureStore'
+import { store } from 'store/configureStore'
+import { selectNextPlayer } from 'store/selectors'
 
 class Game {
   //   state: RootState
@@ -10,7 +11,7 @@ class Game {
 
   setNextActivePlayer() {
     const rootState = store.getState()
-    const nextPlayer = getNextPlayer(rootState)
+    const nextPlayer = selectNextPlayer(rootState)
     store.dispatch(activePlayerSlice.actions.setActive(nextPlayer.id))
   }
 }

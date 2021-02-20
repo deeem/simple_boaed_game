@@ -2,8 +2,9 @@ import React, { FC } from 'react'
 import { Tile } from './Tile'
 import { TilesContainer } from './Layout.style'
 import { useSelector } from 'react-redux'
-import { getTiles } from 'store/configureStore'
+
 import { IPlayer } from 'store/playerSlice'
+import { selectTilesWithRelations } from 'store/selectors'
 
 type TileExpanded = {
   waypoint?: number
@@ -11,7 +12,7 @@ type TileExpanded = {
 }
 
 const Layout: FC = () => {
-  const tiles = useSelector(getTiles) as TileExpanded[]
+  const tiles = useSelector(selectTilesWithRelations) as TileExpanded[]
 
   const dimensions = [4, 4]
   const [xMax, yMax] = dimensions

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { getLastWaypoint } from 'util/getLastWaypoint'
 
 export interface ITile {
   waypoint?: number
@@ -38,11 +39,7 @@ const tileSlice = createSlice({
       state,
       { payload }: PayloadAction<{ id: string; value: number }>,
     ) => {
-      const lastWaypoint = state.reduce(
-        (acc, tile) =>
-          tile.waypoint && tile.waypoint > acc ? tile.waypoint : acc,
-        1,
-      )
+      const lastWaypoint = getLastWaypoint(state)
 
       const currentTileIndx = state.findIndex((tile) =>
         tile.players?.includes(payload.id),
