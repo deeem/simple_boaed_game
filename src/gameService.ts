@@ -49,8 +49,8 @@ const machine = createMachine(
         activePlayer: (context) =>
           getNextPlayer(context.activePlayer, context.players).id,
       }),
-      movePlayerForward: (context, event) => {
-        game.movePlayerForward(context.activePlayer)
+      movePlayerForward: () => {
+        game.movePlayerForward()
       },
       assignMovePlayerForward: assign({
         tiles: (context, event) =>

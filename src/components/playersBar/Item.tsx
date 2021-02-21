@@ -24,7 +24,7 @@ const Item: FC<Props> = ({ player, activePlayer }) => {
     //   }),
     // )
 
-    const moves = window.confirm('enter moves') // типа открыли модалку
+    // const moves = window.confirm('enter moves') // типа открыли модалку
 
     gameService.send('player_move_input_recieved')
   }

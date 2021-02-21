@@ -25,8 +25,11 @@ class Game {
     )
   }
 
-  movePlayerForward(activePlayerId: string) {
-    store.dispatch(tileSlice.actions.movePlayerForward({ id: activePlayerId }))
+  movePlayerForward() {
+    const rootState = store.getState()
+    store.dispatch(
+      tileSlice.actions.movePlayerForward({ id: rootState.activePlayer }),
+    )
   }
 }
 
