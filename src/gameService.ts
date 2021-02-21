@@ -36,9 +36,7 @@ const machine = createMachine(
       },
       move_phase: {
         entry: ['log', 'movePlayerForward', 'assignMovePlayerForward'],
-        on: {
-          always: [{ target: 'player_turn_start_phase' }],
-        },
+        always: 'player_turn_start_phase',
       },
     },
   },
