@@ -10,6 +10,11 @@ type Props = {
   activePlayer: string
 }
 
+export type PlayerMoveInputRecievedEvent = {
+  type: string
+  value: number
+}
+
 const Item: FC<Props> = ({ player, activePlayer }) => {
   // const dispatch = useDispatch()
 
@@ -26,7 +31,15 @@ const Item: FC<Props> = ({ player, activePlayer }) => {
 
     // const moves = window.confirm('enter moves') // типа открыли модалку
 
-    gameService.send('player_move_input_recieved')
+    const moves = window.prompt('enter moves: ', '1')
+
+    gameService.send('player_move_input_recieved', { value: moves })
+
+    // const event = {
+    //   type: 'player_move_input_recieved',
+    //   value: 1,
+    // }
+    // gameService.send(event)
   }
 
   return (

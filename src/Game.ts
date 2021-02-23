@@ -16,11 +16,11 @@ class Game {
     store.dispatch(activePlayerSlice.actions.setActive(nextPlayer.id))
   }
 
-  movePlayer(activePlayer: string) {
+  movePlayer(activePlayer: string, value = 1) {
     store.dispatch(
       tileSlice.actions.movePlayer({
         id: activePlayer,
-        value: 1,
+        value,
       }),
     )
   }

@@ -4,19 +4,43 @@ import {
   initialPlayerSlice,
   initialTileSlice,
 } from 'initialValues'
+import { IPlayer } from 'store/playerSlice'
+import { ITile } from 'store/tileSlice'
 import { getNextPlayer } from 'util/getNextPlayer'
 import { movePlayerForward } from 'util/movePlayerForward'
 import { assign, createMachine, interpret } from 'xstate'
+import { createModel } from 'xstate/lib/model' // opt-in, not part of main build
 
 const game = new Game()
 
-const machine = createMachine(
+interface MachineContext {
+  tiles: ITile[]
+  players: IPlayer[]
+  activePlayer: string
+  movesLeft: number
+}
+
+type MachineEvents =
+  | { type: 'start_game' }
+  | { type: 'player_move_input_recieved'; value: number }
+
+const machineModel = createModel<MachineContext, MachineEvents>({
+  tiles: initialTileSlice,
+  players: initialPlayerSlice,
+  activePlayer: initialactivePlayerSlice,
+  movesLeft: 0,
+})
+
+const assingMovesLeft = machineModel.assign(
   {
-    context: {
-      tiles: initialTileSlice,
-      players: initialPlayerSlice,
-      activePlayer: initialactivePlayerSlice,
-    },
+    movesLeft: (_, event) => +event.value,
+  },
+  'player_move_input_recieved',
+)
+
+const machine = createMachine<MachineContext, MachineEvents>(
+  {
+    context: machineModel.initialContext,
     initial: 'initial_phase',
     states: {
       initial_phase: {
@@ -30,6 +54,7 @@ const machine = createMachine(
         entry: ['setNextPlayerActive', 'assingNextPlayerActive'],
         on: {
           player_move_input_recieved: {
+            actions: assingMovesLeft,
             target: 'move_phase',
           },
         },
