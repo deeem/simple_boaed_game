@@ -6,7 +6,9 @@ import {
 } from 'initialValues'
 import { IPlayer } from 'store/playerSlice'
 import { ITile } from 'store/tileSlice'
+import { getLastWaypoint } from 'util/getLastWaypoint'
 import { getNextPlayer } from 'util/getNextPlayer'
+import { getTileByPlayerId } from 'util/getTileByPlayerId'
 import { movePlayerForward } from 'util/movePlayerForward'
 import { assign, createMachine, interpret } from 'xstate'
 import { createModel } from 'xstate/lib/model' // opt-in, not part of main build
@@ -46,22 +48,53 @@ const machine = createMachine<MachineContext, MachineEvents>(
       initial_phase: {
         on: {
           start_game: {
-            target: 'player_turn_start_phase',
+            target: 'player_wait_move_input',
           },
         },
       },
-      player_turn_start_phase: {
+      player_wait_move_input: {
         entry: ['setNextPlayerActive', 'assingNextPlayerActive'],
         on: {
           player_move_input_recieved: {
             actions: assingMovesLeft,
-            target: 'move_phase',
+            target: 'player_move_forward',
           },
         },
       },
-      move_phase: {
+      player_move_forward: {
         entry: ['log', 'movePlayerForward', 'assignMovePlayerForward'],
-        always: 'player_turn_start_phase',
+        always: 'checkLastWaypont',
+        exit: assign({ movesLeft: (context) => context.movesLeft - 1 }),
+      },
+      checkLastWaypont: {
+        always: [
+          {
+            target: 'gameOver',
+            cond: (context) => {
+              return (
+                getTileByPlayerId(context.activePlayer, context.tiles)
+                  .waypoint === getLastWaypoint(context.tiles)
+              )
+            },
+          },
+          {
+            target: 'checkMovesLeft',
+          },
+        ],
+      },
+      checkMovesLeft: {
+        always: [
+          {
+            target: 'player_move_forward',
+            cond: (context) => context.movesLeft > 0,
+          },
+          {
+            target: 'player_wait_move_input',
+          },
+        ],
+      },
+      gameOver: {
+        type: 'final',
       },
     },
   },
